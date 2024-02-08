@@ -26,6 +26,6 @@ async def read_example(login: Login):
 
 
 @router.get("/check_authentication", tags=["Authentication"])
-def check_authentication(token: str, user_id=Depends(auth_handler.auth_wrapper)):
+def check_authentication(user_id=Depends(auth_handler.auth_wrapper)):
     if user_id:
         return {"success": True, "message": "User is authenticated"}
