@@ -1,1 +1,5 @@
 fastapi==0.109.2
+load-dotenv==0.1.0
+pymongo==4.6.1
+PyJWT==2.8.0
+passlib==1.7.4
