@@ -1,11 +1,25 @@
 import pymongo
+import time
 from .constants import db_user, db_pass
 
-# Connect to MongoDB
-client = pymongo.MongoClient(
-    f"mongodb+srv://{db_user}:{db_pass}@cluster0.ds5ggbq.mongodb.net/?retryWrites=true&w=majority"
-)
+# Maximum time to wait for the database connection (3 minutes)
+DB_CONNECTION_TIMEOUT = 180  # in seconds
 
+def connect_to_database():
+    start_time = time.time()
+    while True:
+        try:
+            client = pymongo.MongoClient(
+                f"mongodb+srv://{db_user}:{db_pass}@cluster0.ds5ggbq.mongodb.net/?retryWrites=true&w=majority",
+                serverSelectionTimeoutMS=DB_CONNECTION_TIMEOUT * 1000
+            )
+            return client
+        except pymongo.errors.ServerSelectionTimeoutError:
+            if time.time() - start_time > DB_CONNECTION_TIMEOUT:
+                raise TimeoutError("Connection to the database timed out.")
+            time.sleep(0.2)
+
+client = connect_to_database()
 
 def get_db():
     return client.get_database("starter_template")
