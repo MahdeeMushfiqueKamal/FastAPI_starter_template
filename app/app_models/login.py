@@ -5,7 +5,7 @@ class Login(BaseModel):
     password: str
     
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "username": "user",
                 "password": "1234"
