@@ -30,7 +30,7 @@ import jwt
 from fastapi import HTTPException, Security
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from passlib.context import CryptContext
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 
 class AuthHandler:
@@ -46,8 +46,8 @@ class AuthHandler:
 
     def encode_token(self, user_id):
         payload = {
-            "exp": datetime.utcnow() + timedelta(days=0, minutes=30),
-            "iat": datetime.utcnow(),
+            "exp": datetime.now(timezone.utc) + timedelta(days=0, minutes=30),
+            "iat": datetime.now(timezone.utc),
             "sub": user_id,
         }
         return jwt.encode(payload, self.secret, algorithm="HS256")
